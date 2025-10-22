@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "y": "^0.3.2"
+  },
+  "scripts": {
+    "dev": "nodemon index.js"
+  }
+}
