@@ -33,11 +33,7 @@ const Navigation = () => {
       <div className="nav-left">JobSync</div>
       <nav className="nav-links">
         {navigationItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={location.pathname === item.path ? 'active' : ''}
-          >
+          <Link key={item.path} to={item.path} className={location.pathname === item.path ? 'active' : ''}>
             {item.label}
           </Link>
         ))}
