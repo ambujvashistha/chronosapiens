@@ -1,0 +1,33 @@
+.landing {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background: linear-gradient(135deg, #e0eafc, #cfdef3); */
+  background: white;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.landing-content h1 {
+  font-size: 36px;
+  color: #2c3e50;
+}
+
+.landing-content p {
+  color: #555;
+  margin: 20px 0;
+}
+
+.btn-primary {
+  background:radial-gradient(circle at 50% 50%, red, darkred);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background: radial-gradient(circle at 50% 50%, lightgreen, green);
+}

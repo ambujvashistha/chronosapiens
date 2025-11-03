@@ -1,17 +1,16 @@
-const LandingPage = () => {
+import React from "react";
+import "./LandingPage.css";
+
+function LandingPage() {
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <h1 className="page-title">Landing Page</h1>
-        <p className="page-subtitle">Welcome to JobSync - Your unified job application hub.</p>
-      </div>
-      
-      <div className="card">
-        <h2>Coming Soon</h2>
-        <p>This page will contain the main landing content for JobSync.</p>
+    <div className="landing">
+      <div className="landing-content">
+        <h1>JobSync – Your Unified Job Application Hub</h1>
+        <p>Manage all ur job portals like Naukri, Internshala, Glassdoor, and Unstop in one dashboard</p>
+        <a href="/login" className="btn-primary">Get Started</a>
       </div>
     </div>
-  )
+  );
 }
 
-export default LandingPage
+export default LandingPage;

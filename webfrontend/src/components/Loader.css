@@ -1,0 +1,24 @@
+.loader {
+    width: 40px;
+    aspect-ratio: 1;
+    --c: linear-gradient(#000 0 0);
+    --m: radial-gradient(farthest-side, #000 92%, #0000);
+    background:
+      var(--c), var(--m),
+      var(--c), var(--m),
+      var(--c), var(--m);
+    background-size: 8px 12px, 8px 8px;
+    background-repeat: no-repeat;
+    animation: l16 1s infinite linear alternate;
+  }
+  
+  @keyframes l16 {
+    0%, 5% {background-position: 0 50%, 0 0, 50% 50%, 50% 0, 100% 50%, 100% 0;}
+    16.67% {background-position: 0 50%, 0 calc(50% - 10px), 50% 50%, 50% 0, 100% 50%, 100% 0;}
+    33.33% {background-position: 0 calc(50% + 10px), 0 50%, 50% 50%, 50% 0, 100% 50%, 100% 0;}
+    50%    {background-position: 0 calc(50% + 10px), 0 50%, 50% 50%, 50% calc(50% - 10px), 100% 50%, 100% 0;}
+    66.67% {background-position: 0 calc(50% + 10px), 0 50%, 50% calc(50% + 10px), 50% 50%, 100% 50%, 100% 0;}
+    83.33% {background-position: 0 calc(50% + 10px), 0 50%, 50% calc(50% + 10px), 50% 50%, 100% 50%, 100% calc(50% - 10px);}
+    95%,100% {background-position: 0 calc(50% + 10px), 0 50%, 50% calc(50% + 10px), 50% 50%, 100% calc(50% + 10px), 100% 50%;}
+  }
+  

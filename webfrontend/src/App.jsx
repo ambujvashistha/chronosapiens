@@ -1,21 +1,35 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Navigation from './components/Navigation'
-import LandingPage from './pages/LandingPage'
-import LoginPage from './pages/LoginPage'
-import Dashboard from './pages/Dashboard'
-import ProfilePage from './pages/ProfilePage'
-import ConnectionsPage from './pages/ConnectionsPage'
-import ApplicationsPage from './pages/ApplicationsPage'
-import AdminPanel from './pages/AdminPanel'
-import SettingsPage from './pages/SettingsPage'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
+import ProfilePage from "./pages/ProfilePage";
+import ConnectionsPage from "./pages/ConnectionsPage";
+import ApplicationsPage from "./pages/ApplicationsPage";
+import AdminPanel from "./pages/AdminPanel";
+import SettingsPage from "./pages/SettingsPage";
+import Loader from "./components/Loader";
+import "./App.css";
 
 function App() {
+  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1000); // duration in ms
+    return () => clearTimeout(timer);
+  }, [location]);
+
   return (
-    <Router>
-      <div className="app">
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
         <Navigation />
-        <main className="main-content">
+        <div className="main-container">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -26,10 +40,11 @@ function App() {
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
-        </main>
-      </div>
-    </Router>
-  )
+        </div>
+        </>
+      )}
+    </>
+  );
 }
 
-export default App
+export default App;

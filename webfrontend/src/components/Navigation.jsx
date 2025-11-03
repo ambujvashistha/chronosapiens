@@ -1,49 +1,22 @@
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Navigation.css";
 
-const Navigation = () => {
-  const location = useLocation()
-
-  const navigationItems = [
-    { path: '/', label: 'Home' },
-    { path: '/dashboard', label: 'Dashboard' },
-    { path: '/profile', label: 'Profile' },
-    { path: '/connections', label: 'Connections' },
-    { path: '/applications', label: 'Applications' },
-    { path: '/admin', label: 'Admin' },
-    { path: '/settings', label: 'Settings' },
-  ]
-
-  const [theme, setTheme] = useState(() => {
-    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('theme') : null
-    return saved || 'light'
-  })
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.body.classList.add('dark')
-    } else {
-      document.body.classList.remove('dark')
-    }
-    window.localStorage.setItem('theme', theme)
-  }, [theme])
-
+function Navigation() {
   return (
-    <header className="nav">
-      <div className="nav-left">JobSync</div>
-      <nav className="nav-links">
-        {navigationItems.map((item) => (
-          <Link key={item.path} to={item.path} className={location.pathname === item.path ? 'active' : ''}>
-            {item.label}
-          </Link>
-        ))}
+    <nav className="navbar">
+      <h2 className="logo">JobSync</h2>
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/connections">Connections</Link>
+        <Link to="/applications">Applications</Link>
+        <Link to="/profile">Profile</Link>
+        <Link to="/admin">Admin</Link>
         <Link to="/login">Login</Link>
-        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-          {theme === 'light' ? 'Dark' : 'Light'} mode
-        </button>
-      </nav>
-    </header>
-  )
+      </div>
+    </nav>
+  );
 }
 
-export default Navigation
+export default Navigation;

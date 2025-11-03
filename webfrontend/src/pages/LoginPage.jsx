@@ -1,17 +1,12 @@
-const LoginPage = () => {
+import React from "react";
+
+function LoginPage() {
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <h1 className="page-title">Login</h1>
-        <p className="page-subtitle">Sign in to your JobSync account.</p>
-      </div>
-      
-      <div className="card">
-        <h2>Login Form</h2>
-        <p>This page will contain the login and signup forms.</p>
-      </div>
+    <div style={{ textAlign: "center", marginTop: "80px" }}>
+      <h2>Login to JobSync</h2>
+      <p>Authentication system</p>
     </div>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;
