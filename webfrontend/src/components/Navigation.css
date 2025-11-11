@@ -2,25 +2,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 30px;
-  background: white;
-  border-bottom: 1px solid #e3e3e3;
+  height: 15px;
+  padding: 0 40px; 
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky; 
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
-  color: black;
-  font-weight: bold;
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2563eb, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px; 
 }
 
 .nav-links a {
-  margin-left: 24px;
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  transition: 0.3s;
+  font-size: 15px;
+  transition: color 0.2s ease;
+  line-height: 1;
 }
 
 .nav-links a:hover {
-  color: #0077ff;
+  color: #2563eb;
 }

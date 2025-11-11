@@ -8,7 +8,7 @@ const Loader = () => {
         height: "100vh",
         width: "100vw",
         display: "flex",
-        flexDirection: "column", // 👈 Stack vertically
+        flexDirection: "column", 
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#fff",
@@ -18,7 +18,7 @@ const Loader = () => {
       <p
         style={{
           marginTop: "12px",
-          fontWeight: "bold", // 👈 Bold text
+          fontWeight: "bold", 
           fontSize: "18px",
           color: "#000",
         }}

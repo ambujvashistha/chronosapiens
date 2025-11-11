@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// src/App.jsx
+import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import LandingPage from "./pages/LandingPage";
@@ -14,35 +15,29 @@ import "./App.css";
 
 function App() {
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 1000); // duration in ms
-    return () => clearTimeout(timer);
-  }, [location]);
+  const onLanding = location.pathname === "/";
+  if (onLanding) {
+    return (
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    );
+  }
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-        <Navigation />
-        <div className="main-container">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/connections" element={<ConnectionsPage />} />
-            <Route path="/applications" element={<ApplicationsPage />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/settings" element={<SettingsPage />} />
-          </Routes>
-        </div>
-        </>
-      )}
+      <Navigation />
+      <main className="main-container">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/connections" element={<ConnectionsPage />} />
+          <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Routes>
+      </main>
     </>
   );
 }
