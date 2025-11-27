@@ -1,0 +1,130 @@
+
+.connections-container {
+    min-height: 100vh;
+    background-color: #f9f9fb;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  
+  .connections-nav {
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  
+  .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 40px;
+  }
+  
+  .nav-link {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  
+  .nav-link:hover { color: #1e293b; }
+  .nav-link.active {
+    color: #6366f1;
+    border-bottom: 2px solid #6366f1;
+    padding-bottom: 14px;
+  }
+  
+  .connections-main {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 32px;
+    text-align: center;
+  }
+  
+  .page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #1e293b;
+  }
+  
+  .connections-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .connection-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s;
+  }
+  
+  .connection-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  .platform-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+  
+  .connect-button {
+    padding: 10px 32px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  
+  .connect-button {
+    background-color: #bbf7d0;
+    color: #166534;
+  }
+  
+  .connect-button:hover {
+    background-color: #86efac;
+  }
+  
+  .connect-button.connected {
+    background-color: #fca5a5;
+    color: #991b1b;
+  }
+  
+  .connect-button.connected:hover {
+    background-color: #f87171;
+  }
+  
+  .connections-footer {
+    margin-top: 100px;
+    color: #94a3b8;
+    font-size: 14px;
+  }
