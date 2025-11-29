@@ -1,13 +1,24 @@
-import React from "react";
+// Dashboard.jsx
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 
-const jobPlatforms = [
-  { name: "LinkedIn", status: "Connected", jobsSynced: 124 },
-  { name: "Indeed", status: "Pending", jobsSynced: 0 },
-  { name: "Naukri", status: "Connected", jobsSynced: 56 },
-];
-
 function Dashboard() {
+  const [platforms, setPlatforms] = useState([
+    { name: "LinkedIn", status: "Pending", jobsSynced: 124 },
+    { name: "Indeed", status: "Pending", jobsSynced: 0 },
+    { name: "UnStop", status: "Pending", jobsSynced: 26 }
+  ]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("connections")) || {};
+    setPlatforms((prev) =>
+      prev.map((p) => ({
+        ...p,
+        status: saved[p.name] ? "Connected" : "Pending",
+      }))
+    );
+  }, []);
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -16,8 +27,8 @@ function Dashboard() {
       </header>
 
       <section className="platforms">
-        {jobPlatforms.map((platform, i) => (
-          <div key={i} className="platform-card">
+        {platforms.map((platform) => (
+          <div key={platform.name} className="platform-card">
             <div className="platform-top">
               <h2>{platform.name}</h2>
               <span
@@ -34,22 +45,11 @@ function Dashboard() {
           </div>
         ))}
       </section>
-
-      <section className="extras">
-        <div className="extra-card">
-          <h3>Analytics</h3>
-          <p>
-            Coming soon: Visual insights on job performance, sync history, and
-            success rates.
-          </p>
-        </div>
-        <div className="extra-card">
-          <h3>Settings</h3>
-          <p>
-            Manage your connected platforms, refresh tokens, and sync intervals
-            here.
-          </p>
-        </div>
+      <section className="extras"> 
+        <div className="extra-card"> <h3>Analytics</h3> <p> Coming soon: Visual insights on job performance, sync history, and success rates. </p>
+        </div> 
+        <div className="extra-card"> <h3>Settings</h3> <p> Manage your connected platforms, refresh tokens, and sync intervals here. </p>
+        </div> 
       </section>
     </div>
   );
