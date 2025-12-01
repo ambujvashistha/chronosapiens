@@ -4,7 +4,7 @@ const cors = require('cors');
 const { register, login, getProfile } = require('./controllers/authController');
 const { getAllJobs } = require('./controllers/jobController');
 const { authenticateToken } = require('./middleware/auth');
-const { initScheduler } = require('./scheduler');
+const { initScheduler, runAllScrapers } = require('./scheduler');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,6 +32,15 @@ app.post('/api/auth/signup', register);
 app.post('/api/auth/login', login);
 app.get('/api/auth/me', authenticateToken, getProfile);
 app.get('/api/jobs', getAllJobs);
+
+app.post('/api/scraper/run', async (req, res) => {
+  try {
+    res.json({ message: 'Scrapers started. This will run in the background.' });
+    runAllScrapers().catch(err => console.error('Scraper error:', err));
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to start scrapers' });
+  }
+});
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' })

@@ -2,11 +2,11 @@ const cron = require('node-cron');
 const { spawn } = require('child_process');
 const path = require('path');
 
-const SCRAPER_DIR = path.join(__dirname, '../scraper');
+const SCRAPER_DIR = path.join(__dirname, 'scraper');
 const SCRAPERS = [
-    { name: 'Unstop', script: 'unstop_scraper.js' },
     { name: 'Naukri', script: 'naukri_freshers.js' },
-    { name: 'Internshala', script: 'internshala_scraper.js' }
+    { name: 'Internshala', script: 'internshala_scraper.js' },
+    { name: 'Unstop', script: 'unstop_scraper.js' },
 ];
 
 const runScraper = (scraper) => {
@@ -20,9 +20,9 @@ const runScraper = (scraper) => {
             DB_ENABLED: 'true',
             START_PAGE: '1',
             MAX_PAGES: '5',
-            FRESHNESS_DAYS: '1', 
-            FUNCTION_GID: '3', 
-            SEARCH_PATH: 'computer-science-internship', 
+            FRESHNESS_DAYS: '1',
+            FUNCTION_GID: '3',
+            SEARCH_PATH: 'computer-science-internship',
             CONTENT_TYPE: '1'
         };
 
@@ -54,8 +54,9 @@ const runAllScrapers = async () => {
 };
 
 const initScheduler = () => {
-    cron.schedule('0 0,12 * * *', () => {
-        runAllScrapers() })
+    cron.schedule('0 0,6 * * *', () => {
+        runAllScrapers()
+    })
 
     console.log('[Scheduler] Initialized. Scrapers will run every 12 hours.')
 };

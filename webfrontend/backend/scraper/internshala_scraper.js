@@ -11,6 +11,9 @@ import { stdin as input, stdout as output } from 'process';
 dotenv.config();
 
 const BASE_URL = 'https://internshala.com/internships';
+const DEBUG_FOLDER = 'debug_internshala';
+
+const DEBUG_MODE = (process.env.DEBUG || 'true').toLowerCase() === 'true' || (process.env.DEBUG || '1') === '1';
 
 const HEADLESS_MODE = (process.env.HEADLESS || 'false').toLowerCase() === 'true' || (process.env.HEADLESS || '0') === '1';
 const DB_ENABLED = (process.env.DB_ENABLED || 'true').toLowerCase() === 'true' || (process.env.DB_ENABLED || '1') === '1';
@@ -354,7 +357,7 @@ async function scrapePages(context, searchPath, startPage, conn, freshness, maxP
                     pageBatch.push(info);
                     pageResults++;
                     console.log(`   ✅ [${results.length}] ${title} @ ${company}`);
-                    await upsertInternship(conn, info).catch(() => { });
+                    await upsertInternship(conn, info).catch((err) => { console.error('DB Insert Error:', err.message); });
                     scraped_urls.add(href);
                 }
             } catch (e) {

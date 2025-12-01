@@ -11,7 +11,6 @@ import { stdin as input, stdout as output } from 'process';
 dotenv.config();
 
 const BASE_URL = 'https://unstop.com';
-const OUTPUT_FILE = 'unstop_jobs.csv';
 const DEBUG_FOLDER = 'debug_unstop';
 
 const DEBUG_MODE = (process.env.DEBUG || 'true').toLowerCase() === 'true' || (process.env.DEBUG || '1') === '1';

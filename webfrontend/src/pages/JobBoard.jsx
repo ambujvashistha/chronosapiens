@@ -17,7 +17,8 @@ const JobBoard = () => {
     const fetchJobs = async () => {
         try {
             setLoading(true)
-            const response = await axios.get('http://localhost:3000/api/jobs')
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const response = await axios.get(`${API_URL}/api/jobs`)
             if (response.data.success) {
                 setJobs(response.data.data)
             }
@@ -63,7 +64,7 @@ const JobBoard = () => {
                     <div className="flex bg-gray-100 p-1 rounded-lg">
                         {['All', 'Unstop', 'Naukri', 'Internshala'].map((f) => (
                             <button key={f} onClick={() => setFilter(f)}
-                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${filter === f ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700' }`}>
+                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${filter === f ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
                                 {f}
                             </button>
                         ))}
