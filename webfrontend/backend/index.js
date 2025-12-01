@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { register, login, getProfile } = require('./controllers/authController');
+const { authenticateToken } = require('./middleware/auth');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +25,10 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 });
+
+app.post('/api/auth/signup', register);
+app.post('/api/auth/login', login);
+app.get('/api/auth/me', authenticateToken, getProfile);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' })
