@@ -12,6 +12,7 @@ import ConnectionsPage from "./pages/ConnectionsPage";
 import ApplicationsPage from "./pages/ApplicationsPage";
 import AdminPanel from "./pages/AdminPanel";
 import SettingsPage from "./pages/SettingsPage";
+import JobBoard from "./pages/JobBoard";
 import Loader from "./components/Loader";
 import "./App.css";
 
@@ -43,6 +44,7 @@ function AppContent() {
       <main className="main-container">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/jobs" element={<JobBoard />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/connections" element={<ConnectionsPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />

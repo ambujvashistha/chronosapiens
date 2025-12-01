@@ -70,3 +70,68 @@ enum JobStatus {
   WITHDRAWN
 }
 
+
+model UnstopJob {
+  job_url      String   @id @db.VarChar(500)
+  title        String?  @db.VarChar(500)
+  organization String?  @db.VarChar(300)
+  type         String?  @db.VarChar(100)
+  location     String?  @db.VarChar(300)
+  deadline     String?  @db.VarChar(200)
+  applicants   String?  @db.VarChar(100)
+  salary       String?  @db.VarChar(200)
+  experience   String?  @db.VarChar(200)
+  description  String?  @db.Text
+  skills       String?  @db.Text
+  posted_date  String?  @db.VarChar(100)
+  page         Int?
+  freshness    String?  @db.VarChar(50)
+  first_seen   DateTime @default(now()) @db.Timestamp(0)
+  last_seen    DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  data_hash    String?  @db.Char(64)
+
+  @@map("unstop_jobs")
+}
+
+model NaukriJob {
+  job_url      String   @id @db.VarChar(500)
+  job_name     String?  @db.VarChar(300)
+  company      String?  @db.VarChar(300)
+  rating       String?  @db.VarChar(50)
+  reviews      String?  @db.VarChar(100)
+  experience   String?  @db.VarChar(200)
+  salary       String?  @db.VarChar(200)
+  location     String?  @db.VarChar(300)
+  posted       String?  @db.VarChar(100)
+  openings     String?  @db.VarChar(100)
+  applicants   String?  @db.VarChar(100)
+  page         Int?
+  freshness    String?  @db.VarChar(50)
+  function_gid String?  @db.VarChar(50)
+  first_seen   DateTime @default(now()) @db.Timestamp(0)
+  last_seen    DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  data_hash    String?  @db.Char(64)
+
+  @@map("naukri_jobs")
+}
+
+model Internship {
+  internship_url String   @id @db.VarChar(500)
+  title          String?  @db.VarChar(300)
+  company        String?  @db.VarChar(300)
+  location       String?  @db.VarChar(300)
+  stipend        String?  @db.VarChar(200)
+  duration       String?  @db.VarChar(100)
+  start_date     String?  @db.VarChar(100)
+  apply_by       String?  @db.VarChar(100)
+  applicants     String?  @db.VarChar(100)
+  skills         String?  @db.Text
+  openings       String?  @db.VarChar(100)
+  category       String?  @db.VarChar(100)
+  page           Int?
+  data_hash      String?  @db.Char(64)
+  first_seen     DateTime @default(now()) @db.Timestamp(0)
+  last_seen      DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@map("internships")
+}

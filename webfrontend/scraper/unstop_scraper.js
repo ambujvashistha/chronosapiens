@@ -46,13 +46,19 @@ async function saveToCsv(data, filePath) {
 async function dbConnect() {
     if (!DB_ENABLED) return null;
     try {
-        const conn = await mysql.createConnection({
-            host: process.env.MYSQL_HOST || 'localhost',
-            user: process.env.MYSQL_USER || 'root',
-            password: process.env.MYSQL_PASSWORD || 'password',
-            database: process.env.MYSQL_DB || 'scrapers',
-            multipleStatements: false
-        });
+        let connectionConfig = {};
+        if (process.env.DATABASE_URL) {
+            connectionConfig = { uri: process.env.DATABASE_URL, multipleStatements: false };
+        } else {
+            connectionConfig = {
+                host: process.env.MYSQL_HOST || 'localhost',
+                user: process.env.MYSQL_USER || 'root',
+                password: process.env.MYSQL_PASSWORD || 'password',
+                database: process.env.MYSQL_DB || 'scrapers',
+                multipleStatements: false
+            };
+        }
+        const conn = await mysql.createConnection(connectionConfig);
         return conn;
     } catch (e) {
         console.warn('⚠️ Could not connect to DB:', e.message);
@@ -266,7 +272,7 @@ async function parseDetailPage(page) {
 
 async function scrapePages(context, contentTypeObj, freshness, start_page, conn, max_pages) {
     const page = await context.newPage();
-    ensureFolder(DEBUG_FOLDER);
+    if (DEBUG_MODE) ensureFolder(DEBUG_FOLDER);
     const results = [];
 
     const { urls: scraped_urls, hashes: existing_hashes } = await loadExistingJobs(conn);
@@ -326,10 +332,12 @@ async function scrapePages(context, contentTypeObj, freshness, start_page, conn,
                     if (scraped_keys.has(unique_key)) { skipped.dup_key++; continue; }
                     scraped_keys.add(unique_key);
 
-                    const info = {'Job URL': href, 'Title': title, 'Organization': org,
+                    const info = {
+                        'Job URL': href, 'Title': title, 'Organization': org,
                         'Type': contentTypeObj.value.charAt(0).toUpperCase() + contentTypeObj.value.slice(1),
                         'Location': loc || 'N/A', 'Deadline': deadline || 'N/A', 'Applicants': applicants || 'N/A',
-                        ...detailInfo, 'Page': scroll_count + 1, 'Freshness': freshness.text};
+                        ...detailInfo, 'Page': scroll_count + 1, 'Freshness': freshness.text
+                    };
 
                     const new_hash = computeJobHash(info);
                     if (existing_hashes[href] === new_hash) {
@@ -411,8 +419,13 @@ async function main() {
 
     let max_pages = parseInt(process.env.MAX_PAGES || '');
     if (isNaN(max_pages)) {
-        max_pages = await getIntInput('Max pages to scrape (default 5, 0 for unlimited): ', 5);
-        if (max_pages === 0) max_pages = null;
+        // If running in automated mode (e.g. from scheduler), default to 5 if not set, else ask
+        if (process.env.HEADLESS === 'true') {
+            max_pages = 5;
+        } else {
+            max_pages = await getIntInput('Max pages to scrape (default 5, 0 for unlimited): ', 5);
+            if (max_pages === 0) max_pages = null;
+        }
     }
 
     console.log(`\n🚀 Scraping ${contentTypeObj.text} starting from page ${start_page} with freshness '${freshness.text}'`);

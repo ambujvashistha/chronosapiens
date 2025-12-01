@@ -31,11 +31,7 @@ function Dashboard() {
           <div key={platform.name} className="platform-card">
             <div className="platform-top">
               <h2>{platform.name}</h2>
-              <span
-                className={`status-badge ${
-                  platform.status === "Connected" ? "connected" : "pending"
-                }`}
-              >
+              <span className={`status-badge ${ platform.status === "Connected" ? "connected" : "pending" }`}>
                 {platform.status}
               </span>
             </div>
