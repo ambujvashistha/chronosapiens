@@ -11,10 +11,7 @@ import { stdin as input, stdout as output } from 'process';
 dotenv.config();
 
 const BASE_URL = 'https://internshala.com/internships';
-const OUTPUT_FILE = 'internshala_internships.csv';
-const DEBUG_FOLDER = 'debug_internshala';
 
-const DEBUG_MODE = (process.env.DEBUG || 'true').toLowerCase() === 'true' || (process.env.DEBUG || '1') === '1';
 const HEADLESS_MODE = (process.env.HEADLESS || 'false').toLowerCase() === 'true' || (process.env.HEADLESS || '0') === '1';
 const DB_ENABLED = (process.env.DB_ENABLED || 'true').toLowerCase() === 'true' || (process.env.DB_ENABLED || '1') === '1';
 
@@ -30,24 +27,23 @@ function ensureFolder(p) {
     try { fs.mkdirSync(p, { recursive: true }); } catch (e) { }
 }
 
-async function saveToCsv(data, filePath) {
-    if (!data || data.length === 0) return;
-    const headers = Object.keys(data[0]).map(k => ({ id: k, title: k }));
-    const csvWriter = createObjectCsvWriter({ path: filePath, header: headers, append: fs.existsSync(filePath) });
-    await csvWriter.writeRecords(data);
-    console.log(`💾 Saved ${data.length} records to ${filePath}`);
-}
 
 async function dbConnect() {
     if (!DB_ENABLED) return null;
     try {
-        const conn = await mysql.createConnection({
-            host: process.env.MYSQL_HOST || 'localhost',
-            user: process.env.MYSQL_USER || 'root',
-            password: process.env.MYSQL_PASSWORD || 'password',
-            database: process.env.MYSQL_DB || 'internshala_db',
-            multipleStatements: false
-        });
+        let connectionConfig = {};
+        if (process.env.DATABASE_URL) {
+            connectionConfig = { uri: process.env.DATABASE_URL, multipleStatements: false };
+        } else {
+            connectionConfig = {
+                host: process.env.MYSQL_HOST || 'localhost',
+                user: process.env.MYSQL_USER || 'root',
+                password: process.env.MYSQL_PASSWORD || 'password',
+                database: process.env.MYSQL_DB || 'internshala_db',
+                multipleStatements: false
+            };
+        }
+        const conn = await mysql.createConnection(connectionConfig);
         return conn;
     } catch (e) {
         console.warn('⚠️ Could not connect to DB:', e.message);
@@ -259,7 +255,7 @@ async function parseDetailPage(page) {
 
 async function scrapePages(context, searchPath, startPage, conn, freshness, maxPages) {
     const page = await context.newPage();
-    ensureFolder(DEBUG_FOLDER);
+    if (DEBUG_MODE) ensureFolder(DEBUG_FOLDER);
     const results = [];
 
     const { urls: scraped_urls, hashes: existing_hashes } = await loadExisting(conn);
@@ -292,20 +288,20 @@ async function scrapePages(context, searchPath, startPage, conn, freshness, maxP
         }
 
         let cards = page.locator("div.card, .internship_list_container li, li.internship, div.internship_meta, .profile, div.container-fluid.individual_internship");
-        let count = await cards.count();
-        console.log(`   → Found ${count} internships on page`);
+        let count = await cards.count()
+        console.log(`   → Found ${count} internships on page`)
 
         if (count === 0) {
             try {
-                await page.reload({ waitUntil: 'domcontentloaded' });
+                await page.reload({ waitUntil: 'domcontentloaded' })
                 await new Promise(res => setTimeout(res, 1000));
                 cards = page.locator("div.card, .internship_list_container li, li.internship, div.internship_meta, .profile, div.container-fluid.individual_internship");
-                count = await cards.count();
+                count = await cards.count()
             } catch (e) { }
             if (count === 0) {
-                consecutiveEmptyPages++;
-                currentPage++;
-                continue;
+                consecutiveEmptyPages++
+                currentPage++
+                continue
             }
         }
 
@@ -328,8 +324,8 @@ async function scrapePages(context, searchPath, startPage, conn, freshness, maxP
                 const pad = detailInfo.PostedAgeDays;
 
                 if (pad !== null && freshness && pad > freshness.days) {
-                    skipped.freshness++;
-                    continue;
+                    skipped.freshness++
+                    continue
                 }
 
                 if (title && company) {
@@ -400,23 +396,34 @@ async function scrapePages(context, searchPath, startPage, conn, freshness, maxP
 }
 
 async function main() {
-    const searchPath = process.env.SEARCH_PATH || (await rl.question("Search path (e.g., 'engineering' or leave blank for all): ")).trim();
+    let searchPath = process.env.SEARCH_PATH;
+    if (!searchPath) {
+        if (process.env.HEADLESS === 'true') {
+            searchPath = ''
+        } else {
+            searchPath = (await rl.question("Search path (e.g., 'engineering' or leave blank for all): ")).trim();
+        }
+    }
 
-    let startPage = parseInt(process.env.START_PAGE || '');
-    if (!startPage || isNaN(startPage)) startPage = await getIntInput('Start page (default 1): ', 1);
+    let startPage = parseInt(process.env.START_PAGE || '')
+    if (!startPage || isNaN(startPage)) startPage = await getIntInput('Start page (default 1): ', 1)
 
     let freshness = null;
     const envDays = process.env.FRESHNESS_DAYS;
     if (envDays && Object.values(FRESHNESS_OPTIONS).some(v => String(v.days) === String(envDays))) {
         freshness = Object.values(FRESHNESS_OPTIONS).find(v => String(v.days) === String(envDays));
     } else {
-        freshness = await chooseFreshness();
+        freshness = await chooseFreshness()
     }
 
-    let maxPages = parseInt(process.env.MAX_PAGES || '');
+    let maxPages = parseInt(process.env.MAX_PAGES || '')
     if (isNaN(maxPages)) {
-        maxPages = await getIntInput('Max pages to scrape (default 5, 0 for unlimited): ', 5);
-        if (maxPages === 0) maxPages = null;
+        if (process.env.HEADLESS === 'true') {
+            maxPages = 5;
+        } else {
+            maxPages = await getIntInput('Max pages to scrape (default 5, 0 for unlimited): ', 5);
+            if (maxPages === 0) maxPages = null;
+        }
     }
 
     console.log(`\n🚀 Scraping starting from page ${startPage} with freshness '${freshness.text}'`);

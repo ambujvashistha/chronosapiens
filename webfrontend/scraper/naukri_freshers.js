@@ -40,13 +40,19 @@ async function saveToCsv(data, filePath) {
 async function dbConnect() {
   if (!DB_ENABLED) return null;
   try {
-    const conn = await mysql.createConnection({
-      host: process.env.MYSQL_HOST || 'localhost',
-      user: process.env.MYSQL_USER || 'root',
-      password: process.env.MYSQL_PASSWORD || 'password',
-      database: process.env.MYSQL_DB || 'scrapers',
-      multipleStatements: false
-    });
+    let connectionConfig = {};
+    if (process.env.DATABASE_URL) {
+      connectionConfig = { uri: process.env.DATABASE_URL, multipleStatements: false };
+    } else {
+      connectionConfig = {
+        host: process.env.MYSQL_HOST || 'localhost',
+        user: process.env.MYSQL_USER || 'root',
+        password: process.env.MYSQL_PASSWORD || 'password',
+        database: process.env.MYSQL_DB || 'scrapers',
+        multipleStatements: false
+      };
+    }
+    const conn = await mysql.createConnection(connectionConfig);
     return conn;
   } catch (e) {
     console.warn('⚠️ Could not connect to DB:', e.message);
@@ -278,7 +284,7 @@ async function checkIfPageHasJobs(page) {
 
 async function scrapePages(context, freshness, function_gid, start_page, conn) {
   const page = await context.newPage();
-  ensureFolder(DEBUG_FOLDER);
+  if (DEBUG_MODE) ensureFolder(DEBUG_FOLDER);
   const results = [];
 
   const { urls: scraped_urls, hashes: existing_hashes } = await loadExistingJobs(conn);
@@ -383,7 +389,14 @@ async function main() {
     freshness = await chooseFreshness();
   }
 
-  let function_gid = process.env.FUNCTION_GID || (await rl.question('\n🏷️ Enter functionAreaIdGid (e.g., 3 for IT): ')).trim();
+  let function_gid = process.env.FUNCTION_GID;
+  if (!function_gid) {
+    if (process.env.HEADLESS === 'true') {
+      function_gid = '3'; // Default to IT-Software for automated runs
+    } else {
+      function_gid = (await rl.question('\n🏷️ Enter functionAreaIdGid (e.g., 3 for IT): ')).trim();
+    }
+  }
   if (!function_gid) function_gid = '3';
 
   let start_page = parseInt(process.env.START_PAGE || '');

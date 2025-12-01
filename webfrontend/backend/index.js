@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { register, login, getProfile } = require('./controllers/authController');
+const { getAllJobs } = require('./controllers/jobController');
 const { authenticateToken } = require('./middleware/auth');
+const { initScheduler } = require('./scheduler');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -29,6 +31,7 @@ app.get('/health', (req, res) => {
 app.post('/api/auth/signup', register);
 app.post('/api/auth/login', login);
 app.get('/api/auth/me', authenticateToken, getProfile);
+app.get('/api/jobs', getAllJobs);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' })
@@ -38,4 +41,5 @@ app.listen(port, () => {
   console.log(`JobSync API Server running on port ${port}`)
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
   console.log(`CORS enabled for: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`)
+  initScheduler();
 })
