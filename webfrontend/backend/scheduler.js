@@ -54,7 +54,7 @@ const runAllScrapers = async () => {
 };
 
 const initScheduler = () => {
-    cron.schedule('0 0,12 * * *', () => {
+    cron.schedule('0 0,6 * * *', () => {
         runAllScrapers() })
 
     console.log('[Scheduler] Initialized. Scrapers will run every 12 hours.')
