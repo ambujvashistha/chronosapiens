@@ -1,0 +1,26 @@
+{
+  "name": "naukri-scraper-js",
+  "version": "1.0.0",
+  "description": "Ported Naukri freshers scraper (Playwright + MySQL) from Python to Node.js",
+  "main": "naukri_freshers.js",
+  "type": "module",
+  "scripts": {
+    "start": "node naukri_freshers.js",
+    "scrape:unstop": "node unstop_scraper.js",
+    "scrape:internshala": "node internshala_scraper.js",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "scraper",
+    "naukri",
+    "playwright"
+  ],
+  "author": "Converted by copilot",
+  "license": "MIT",
+  "dependencies": {
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.0.0",
+    "mysql2": "^3.3.0",
+    "playwright": "^1.40.0"
+  }
+}
