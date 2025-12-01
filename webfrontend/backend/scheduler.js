@@ -4,9 +4,9 @@ const path = require('path');
 
 const SCRAPER_DIR = path.join(__dirname, 'scraper');
 const SCRAPERS = [
-    { name: 'Unstop', script: 'unstop_scraper.js' },
     { name: 'Naukri', script: 'naukri_freshers.js' },
-    { name: 'Internshala', script: 'internshala_scraper.js' }
+    { name: 'Internshala', script: 'internshala_scraper.js' },
+    { name: 'Unstop', script: 'unstop_scraper.js' },
 ];
 
 const runScraper = (scraper) => {
