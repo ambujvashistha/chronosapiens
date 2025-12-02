@@ -4,8 +4,10 @@ const prisma = new PrismaClient();
 const getAllJobs = async (req, res) => {
     try {
         const { limit = 20, offset = 0, search = '', source = 'All' } = req.query;
+        console.log('Query params:', { limit, offset, search, source });
         const limitNum = parseInt(limit);
         const offsetNum = parseInt(offset);
+        console.log('Parsed params:', { limitNum, offsetNum });
 
         const [unstopJobs, naukriJobs, internships] = await Promise.all([
             prisma.unstopJob.findMany({ orderBy: { first_seen: 'desc' } }),
@@ -58,7 +60,9 @@ const getAllJobs = async (req, res) => {
         const totalCount = normalizedJobs.length;
         const paginatedJobs = normalizedJobs.slice(offsetNum, offsetNum + limitNum);
 
-        res.json({  success: true,  count: paginatedJobs.length, total: totalCount, data: paginatedJobs  })
+        const responseData = { success: true, count: paginatedJobs.length, total: totalCount, data: paginatedJobs };
+        console.log('Sending response:', { success: responseData.success, count: responseData.count, total: responseData.total, dataLength: responseData.data.length });
+        res.json(responseData)
 
     } catch (error) {
         console.error('Error fetching jobs:', error)
