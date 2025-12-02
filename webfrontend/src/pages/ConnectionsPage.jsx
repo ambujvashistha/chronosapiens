@@ -30,18 +30,25 @@ export default function ConnectionsPage() {
   };
 
   return (
-    <div className="connections-container">
-      <main className="connections-main">
-        <h1 className="page-title">Connections</h1>
+    <div className="connections-page">
+      <div className="connections-container">
+        <div className="connections-header">
+          <h1 className="connections-title">Connections</h1>
+        </div>
+
+        <p className="connections-subtitle">
+          Manage your connections to external job platforms to streamline your application process.
+        </p>
 
         <div className="connections-list">
           {connectionsList.map((conn) => (
             <div key={conn.name} className="connection-card">
-              <span className="platform-name">{conn.name}</span>
+              <div className="platform-info">
+                <span className="platform-name">{conn.name}</span>
+              </div>
               <button
-                className={`connect-button ${
-                  conn.connected ? "connected" : ""
-                }`}
+                className={`connect-button ${conn.connected ? "connected" : ""
+                  }`}
                 onClick={() => handleToggle(conn.name)}
               >
                 {conn.connected ? "Disconnect" : "Connect"}
@@ -51,7 +58,7 @@ export default function ConnectionsPage() {
         </div>
 
         <footer className="connections-footer">JobSync © 2025</footer>
-      </main>
+      </div>
     </div>
   );
 }
