@@ -24,6 +24,8 @@ const register = async (req, res, next) => {
     res.status(201).json({message: 'User registered successfully', user, token})
   } catch (error) {
     console.error(error)
+    const message = process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    return res.status(500).json({ error: message })
   }
 }
 
@@ -46,6 +48,8 @@ const login = async (req, res, next) => {
     res.json({message: 'Login successful',user,token})
   } catch (error) {
     console.error(error)
+    const message = process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    return res.status(500).json({ error: message })
   }
 }
 
@@ -57,6 +61,8 @@ const getProfile = async (req, res, next) => {
     res.json({ user })
   } catch (error) {
     console.error(error)
+    const message = process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    return res.status(500).json({ error: message })
   }
 }
 
