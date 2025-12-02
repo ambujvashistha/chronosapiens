@@ -20,16 +20,13 @@ const JobBoard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalJobs, setTotalJobs] = useState(0);
   const itemsPerPage = 20;
-
   useEffect(() => {
     fetchJobs();
-  }, [currentPage]);
+  }, [currentPage, filter, searchTerm]);
 
   useEffect(() => {
     if (currentPage !== 1) {
       setCurrentPage(1);
-    } else {
-      fetchJobs();
     }
   }, [filter, searchTerm]);
 
@@ -38,12 +35,7 @@ const JobBoard = () => {
       setLoading(true);
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
       const offset = (currentPage - 1) * itemsPerPage;
-      const params = new URLSearchParams({
-        limit: itemsPerPage,
-        offset: offset,
-        source: filter,
-        search: searchTerm
-      });
+      const params = new URLSearchParams({ limit: itemsPerPage, offset: offset, source: filter, search: searchTerm });
       const response = await axios.get(`${API_URL}/api/jobs?${params}`);
       console.log('API Response:', response.data);
       if (response.data.success) {
