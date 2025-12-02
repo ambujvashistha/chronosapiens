@@ -1,119 +1,384 @@
 .profile-page {
-  background: #f9fafb;
   min-height: 100vh;
-  padding: 60px 20px;
-  font-family: "Inter", sans-serif;
+  background: #f5f7fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.top-nav {
+  background: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #1a202c;
+}
+
+.brand-icon {
+  font-size: 1.5rem;
+}
+
+.brand-name {
+  color: #1a202c;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: #2563eb;
+}
+
+.nav-links a.active {
+  color: #f97316;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.notification-btn:hover {
+  transform: scale(1.1);
+}
+
+.logout-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .profile-container {
-  max-width: 700px;
-  margin: 0 auto;
-  background: #ffffff;
-  padding: 40px 30px;
-  border-radius: 20px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
 }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 40px;
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
-.profile-header h1 {
-  font-size: 2rem;
+.profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.profile-title {
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #111827;
+  color: #1a202c;
+  margin: 0 0 0.5rem 0;
 }
 
-.profile-header p {
-  color: #6b7280;
-  font-size: 1rem;
+.profile-subtitle {
+  color: #64748b;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
-.profile-section {
-  margin-bottom: 50px;
-}
-
-.profile-section h2,
-.resume-section h2 {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 20px;
-}
-
-.profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
+.editable-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 6px;
-}
-
-.form-group input {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 1rem;
-  color: #111827;
-  transition: border-color 0.2s ease;
-}
-
-.form-group input:focus {
-  border-color: #2563eb;
-  outline: none;
-}
-
-.save-btn {
-  margin-top: 20px;
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-.save-btn:hover {
+.editable-btn:hover {
+  background: #e2e8f0;
+}
+
+.editable-btn.editing {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.editable-btn.editing:hover {
   background: #1d4ed8;
 }
 
-/* Resume Upload */
-.resume-section {
-  text-align: center;
+.profile-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #1a202c;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.upload-box {
+.profile-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.profile-field p {
+  margin: 0;
+  color: #1a202c;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.role-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.role-badge-wrapper {
+  position: relative;
   display: inline-block;
-  background: #eef2ff;
-  border: 2px dashed #6366f1;
-  color: #3730a3;
-  padding: 30px 50px;
-  border-radius: 14px;
+}
+
+.role-badge {
+  background: #fed7aa;
+  color: #c2410c;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.role-input {
+  border: 1px solid #fdba74;
+  outline: none;
+  min-width: 120px;
+}
+
+.role-input:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1);
+}
+
+.remove-role-btn {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 1;
+  transition: all 0.2s ease;
+}
+
+.remove-role-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.add-role-wrapper {
+  display: inline-block;
+}
+
+.add-role-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #fed7aa;
+  color: #c2410c;
+  border: 1px dashed #fdba74;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.add-role-btn:hover {
+  background: #fdba74;
+  border-color: #f97316;
+  transform: scale(1.05);
+}
+
+.resume-section {
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.resume-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+}
+
+.resume-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resume-file {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.file-icon {
+  font-size: 1.25rem;
+}
+
+.file-name {
+  color: #1a202c;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.upload-resume-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   font-weight: 600;
-  transition: all 0.25s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
-.upload-box:hover {
-  background: #e0e7ff;
-  transform: scale(1.02);
+.upload-resume-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
-.upload-hint {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #6b7280;
+.upload-resume-btn:active {
+  transform: translateY(0);
+}
+
+.profile-footer {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.profile-footer p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .profile-card {
+    padding: 1.5rem;
+  }
+
+  .resume-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .upload-resume-btn {
+    width: 100%;
+  }
 }
