@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 const { register, login, getProfile } = require('./controllers/authController');
 const { getAllJobs } = require('./controllers/jobController');
 const { authenticateToken } = require('./middleware/auth');
@@ -46,9 +48,23 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' })
 })
 
-app.listen(port, () => {
-  console.log(`JobSync API Server running on port ${port}`)
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
-  console.log(`CORS enabled for: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`)
-  initScheduler();
-})
+async function startServer() {
+  try {
+    await prisma.$connect()
+    console.log('✅ Connected to database')
+  } catch (err) {
+    console.error('Failed to connect to the database using DATABASE_URL:', process.env.DATABASE_URL)
+    console.error('Error message:', err.message)
+    console.error('\nMake sure you have a running database and set DATABASE_URL in `backend/.env`.')
+    process.exit(1)
+  }
+
+  app.listen(port, () => {
+    console.log(`JobSync API Server running on port ${port}`)
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
+    console.log(`CORS enabled for: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`)
+    initScheduler();
+  })
+}
+
+startServer()
