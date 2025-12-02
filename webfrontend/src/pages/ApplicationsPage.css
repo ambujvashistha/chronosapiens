@@ -1,8 +1,6 @@
-/* Applications Page Styles */
-
 .applications-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+    background: #f5f7fa;
     padding: 2rem;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -10,105 +8,34 @@
 .applications-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.applications-card {
     background: white;
-    border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-    padding: 3rem;
-    position: relative;
-    overflow: hidden;
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 }
 
-.applications-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-/* Header */
-.page-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-}
-
-.page-title {
-    font-size: 3rem;
+.applications-title {
+    font-size: 1.75rem;
     font-weight: 700;
     color: #1a202c;
-    margin: 0;
-    letter-spacing: -0.02em;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    margin: 0 0 2rem 0;
+    text-align: center;
 }
 
-/* Navigation */
-.nav-tabs {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid #e2e8f0;
-    margin-bottom: 3rem;
-}
-
-.nav-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    transition: transform 0.3s ease;
-}
-
-.nav-logo:hover {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.nav-tab {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #64748b;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.nav-tab:hover {
-    color: #667eea;
-    background: rgba(102, 126, 234, 0.05);
-}
-
-.nav-tab.active {
-    color: #667eea;
-    font-weight: 600;
-}
-
-.nav-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1.7rem;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    border-radius: 2px;
-}
-
-/* Table Container */
 .table-container {
     background: #ffffff;
-    border-radius: 16px;
-    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
     overflow: hidden;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* Applications Table */
 .applications-table {
     width: 100%;
     border-collapse: collapse;
@@ -119,10 +46,10 @@
 }
 
 .applications-table th {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.5rem;
     text-align: left;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     color: #334155;
     text-transform: capitalize;
     letter-spacing: 0.02em;
@@ -144,8 +71,8 @@
 }
 
 .applications-table td {
-    padding: 1.5rem 1.5rem;
-    font-size: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.95rem;
     color: #475569;
     vertical-align: middle;
 }
@@ -185,67 +112,57 @@
     width: 100%;
 }
 
-/* Analytics Section */
 .analytics-section {
     display: flex;
     justify-content: center;
-    margin-bottom: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
 }
 
 .analytics-button {
     background: linear-gradient(135deg, #ffd93d 0%, #f9ca24 100%);
     color: #1a202c;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    padding: 1rem 4rem;
+    padding: 0.875rem 3.5rem;
     border: none;
-    border-radius: 16px;
+    border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(249, 202, 36, 0.3);
+    box-shadow: 0 4px 16px rgba(249, 202, 36, 0.3);
     transition: all 0.3s ease;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif;
     letter-spacing: 0.02em;
 }
 
 .analytics-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(249, 202, 36, 0.4);
+    box-shadow: 0 6px 20px rgba(249, 202, 36, 0.4);
     background: linear-gradient(135deg, #ffe066 0%, #ffd93d 100%);
 }
 
 .analytics-button:active {
     transform: translateY(0);
-    box-shadow: 0 4px 16px rgba(249, 202, 36, 0.3);
+    box-shadow: 0 2px 12px rgba(249, 202, 36, 0.3);
 }
 
-/* Footer */
-.page-footer {
+.applications-footer {
     text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid #e2e8f0;
+    padding: 1.5rem 0;
 }
 
-.page-footer p {
+.applications-footer p {
     margin: 0;
     color: #64748b;
     font-size: 0.95rem;
-    font-weight: 500;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
-    .applications-container {
+    .applications-card {
         padding: 2rem;
     }
 
-    .nav-tabs {
-        gap: 1rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .page-title {
-        font-size: 2.5rem;
+    .applications-title {
+        font-size: 1.5rem;
     }
 }
 
@@ -254,22 +171,13 @@
         padding: 1rem;
     }
 
-    .applications-container {
+    .applications-card {
         padding: 1.5rem;
-        border-radius: 16px;
+        border-radius: 8px;
     }
 
-    .page-title {
-        font-size: 2rem;
-    }
-
-    .nav-tabs {
-        gap: 0.5rem;
-    }
-
-    .nav-tab {
-        font-size: 0.875rem;
-        padding: 0.4rem 0.8rem;
+    .applications-title {
+        font-size: 1.25rem;
     }
 
     .table-container {
@@ -282,45 +190,12 @@
 
     .applications-table th,
     .applications-table td {
-        padding: 1rem;
+        padding: 0.875rem 1rem;
         font-size: 0.875rem;
     }
 
     .analytics-button {
-        font-size: 1.1rem;
-        padding: 0.875rem 3rem;
+        font-size: 1rem;
+        padding: 0.75rem 2.5rem;
     }
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.applications-container {
-    animation: fadeIn 0.6s ease-out;
-}
-
-.applications-table tbody tr {
-    animation: fadeIn 0.4s ease-out backwards;
-}
-
-.applications-table tbody tr:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.applications-table tbody tr:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.applications-table tbody tr:nth-child(3) {
-    animation-delay: 0.3s;
 }
