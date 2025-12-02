@@ -45,9 +45,10 @@ const JobBoard = () => {
         search: searchTerm
       });
       const response = await axios.get(`${API_URL}/api/jobs?${params}`);
+      console.log('API Response:', response.data);
       if (response.data.success) {
-        setJobs(response.data.data)
-        setTotalJobs(response.data.total)
+        setJobs(response.data.data || [])
+        setTotalJobs(response.data.total || 0)
       }
     } catch (err) {
       setError("Failed to load jobs. Please try again later.");
