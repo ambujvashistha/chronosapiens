@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import { chromium } from 'playwright';
+import { chromium, firefox } from 'playwright';
 import mysql from 'mysql2/promise';
 import { createObjectCsvWriter } from 'csv-writer';
 import readline from 'readline/promises';
@@ -42,7 +42,16 @@ async function dbConnect() {
   try {
     let connectionConfig = {};
     if (process.env.DATABASE_URL) {
-      connectionConfig = { uri: process.env.DATABASE_URL, multipleStatements: false };
+      const url = new URL(process.env.DATABASE_URL);
+      connectionConfig = {
+        host: url.hostname,
+        port: parseInt(url.port) || 3306,
+        user: url.username,
+        password: url.password,
+        database: url.pathname.slice(1),
+        multipleStatements: false,
+        ssl: url.hostname.includes('railway') ? { rejectUnauthorized: false } : undefined
+      };
     } else {
       connectionConfig = {
         host: process.env.MYSQL_HOST || 'localhost',
@@ -53,6 +62,7 @@ async function dbConnect() {
       };
     }
     const conn = await mysql.createConnection(connectionConfig);
+    console.log('✅ Database connected successfully');
     return conn;
   } catch (e) {
     console.warn('⚠️ Could not connect to DB:', e.message);
@@ -237,7 +247,7 @@ async function parseDetailPage(page) {
   const reviews = await safeGetText(page, 'span.styles_amb-reviews__0J1e3');
   const experience = await safeGetText(page, 'div.styles_jhc__exp__k_giM span');
   const salary = await safeGetText(page, 'div.styles_jhc__salary__jdfEC span');
-  const location = await safeGetText(page, 'span.styles_jhc__location__W_pVs');
+  const location = await safeGetText(page, 'span.styles_jhc__location__W_pVs, div.styles_jhc__location__W_pVs a');
 
   let posted = 'N/A', openings = 'N/A', applicants = 'N/A';
   const stats = page.locator('span.styles_jhc__stat__PgY67');
@@ -264,13 +274,31 @@ async function parseDetailPage(page) {
 
 async function checkIfPageHasJobs(page) {
   try {
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(5000);
     if ((await page.locator('text=Oops! Something went wrong').count()) > 0 ||
       (await page.locator('text=There was an error loading the page').count()) > 0) {
-      try { await page.reload({ waitUntil: 'domcontentloaded' }); await page.waitForTimeout(2000); } catch (e) { }
+      try { await page.reload({ waitUntil: 'domcontentloaded' }); await page.waitForTimeout(3000); } catch (e) { }
     }
-    const cards = page.locator('div.srp-jobtuple-wrapper, div.cust-job-tuple');
-    const count = await cards.count();
+
+    let cards = page.locator('div.srp-jobtuple-wrapper, div.cust-job-tuple');
+    let count = 0;
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await page.waitForSelector('div.srp-jobtuple-wrapper, div.cust-job-tuple', { timeout: 8000 });
+        break;
+      } catch (e) {
+        if (attempt < 2) {
+          console.log(`     → Waiting for job cards (attempt ${attempt + 1}/3)...`);
+          await page.waitForTimeout(3000);
+        }
+      }
+    }
+
+    count = await cards.count();
+    console.log(`     → Job cards found: ${count}`);
+
+    if (count > 0) return true;
 
     const noResultSelectors = ['.noResultContainer', '.no-result', 'text=No jobs found', 'text=No results found', '.emptyResults'];
     for (const sel of noResultSelectors) {
@@ -278,6 +306,7 @@ async function checkIfPageHasJobs(page) {
     }
     return count > 0;
   } catch (e) {
+    console.log(`     → Error in checkIfPageHasJobs: ${e.message}`);
     return false;
   }
 }
@@ -392,7 +421,7 @@ async function main() {
   let function_gid = process.env.FUNCTION_GID;
   if (!function_gid) {
     if (process.env.HEADLESS === 'true') {
-      function_gid = '3'; // Default to IT-Software for automated runs
+      function_gid = '3';
     } else {
       function_gid = (await rl.question('\n🏷️ Enter functionAreaIdGid (e.g., 3 for IT): ')).trim();
     }
@@ -408,16 +437,66 @@ async function main() {
   const conn = await dbConnect();
   await ensureJobsTable(conn);
 
-  const browser = await chromium.launch({
-    headless: HEADLESS_MODE, args: [
-      '--no-sandbox', '--disable-setuid-sandbox', '--disable-blink-features=AutomationControlled', '--disable-dev-shm-usage', '--disable-infobars', '--disable-notifications'
+  const browser = await firefox.launch({
+    headless: HEADLESS_MODE,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--window-size=1920,1080',
     ]
   });
 
   const ctx = await browser.newContext({
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    viewport: { width: 1280, height: 800 },
-    timezoneId: 'Asia/Kolkata'
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    viewport: { width: 1920, height: 1080 },
+    timezoneId: 'Asia/Kolkata',
+    locale: 'en-IN',
+    deviceScaleFactor: 1,
+    hasTouch: false,
+    isMobile: false,
+    javaScriptEnabled: true,
+    extraHTTPHeaders: {
+      'Accept-Language': 'en-IN,en;q=0.9',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+      'Upgrade-Insecure-Requests': '1',
+      'Sec-Fetch-Site': 'none',
+      'Sec-Fetch-Mode': 'navigate',
+      'Sec-Fetch-User': '?1',
+      'Sec-Fetch-Dest': 'document'
+    }
+  });
+
+  await ctx.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => false })
+    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] })
+    Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] })
+
+    window.screen = {
+      width: 1920,
+      height: 1080,
+      availWidth: 1920,
+      availHeight: 1040,
+      colorDepth: 24,
+      pixelDepth: 24,
+    };
+
+    const originalQuery = window.navigator.permissions.query;
+    window.navigator.permissions.query = (parameters) => (
+      parameters.name === 'notifications' ?
+        Promise.resolve({ state: 'denied' }) :
+        originalQuery(parameters)
+    );
+
+    const getParameter = WebGLRenderingContext.prototype.getParameter;
+    WebGLRenderingContext.prototype.getParameter = function (parameter) {
+      if (parameter === 37445) {
+        return 'Intel Inc.';
+      }
+      if (parameter === 37446) {
+        return 'Intel(R) Iris(R) Xe Graphics';
+      }
+      return getParameter.apply(this, [parameter]);
+    };
   });
 
   try {
