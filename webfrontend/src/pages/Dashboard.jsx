@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
-
-// Static initial data extracted outside component (minor optimization)
 const INITIAL_PLATFORMS = [
   { name: "LinkedIn", status: "Pending", jobsSynced: 124 },
   { name: "Indeed", status: "Pending", jobsSynced: 0 },
@@ -12,11 +10,8 @@ function Dashboard() {
   const [platforms, setPlatforms] = useState(INITIAL_PLATFORMS);
 
   useEffect(() => {
-    // Read saved connection statuses from localStorage safely
     const savedConnections =
       JSON.parse(localStorage.getItem("connections") || "{}") || {};
-
-    // Update only the status field based on saved values
     setPlatforms((prevPlatforms) =>
       prevPlatforms.map((platform) => ({
         ...platform,
@@ -27,7 +22,6 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      {/* Header */}
       <header className="dashboard-header">
         <h1>JobSync Dashboard</h1>
         <p>
@@ -35,7 +29,6 @@ function Dashboard() {
         </p>
       </header>
 
-      {/* Main Platform Cards */}
       <section className="platforms">
         {platforms.map((platform) => {
           const isConnected = platform.status === "Connected";
@@ -44,7 +37,6 @@ function Dashboard() {
               <div className="platform-top">
                 <h2>{platform.name}</h2>
 
-                {/* Dynamic badge class */}
                 <span
                   className={`status-badge ${
                     isConnected ? "connected" : "pending"
@@ -62,7 +54,6 @@ function Dashboard() {
         })}
       </section>
 
-      {/* Extras Section */}
       <section className="extras">
         <div className="extra-card">
           <h3>Analytics</h3>
