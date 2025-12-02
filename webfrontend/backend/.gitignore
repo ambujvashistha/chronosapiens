@@ -4,3 +4,5 @@ node_modules/
 *.log
 dist/
 build/
+debug_*/
+scraped_data/

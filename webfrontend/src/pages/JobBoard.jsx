@@ -17,18 +17,37 @@ const JobBoard = () => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const itemsPerPage = 20;
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    } else {
+      fetchJobs();
+    }
+  }, [filter, searchTerm]);
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const response = await axios.get(`${API_URL}/api/jobs`);
+      const offset = (currentPage - 1) * itemsPerPage;
+      const params = new URLSearchParams({
+        limit: itemsPerPage,
+        offset: offset,
+        source: filter,
+        search: searchTerm
+      });
+      const response = await axios.get(`${API_URL}/api/jobs?${params}`);
       if (response.data.success) {
-        setJobs(response.data.data);
+        setJobs(response.data.data)
+        setTotalJobs(response.data.total)
       }
     } catch (err) {
       setError("Failed to load jobs. Please try again later.");
@@ -37,15 +56,6 @@ const JobBoard = () => {
       setLoading(false);
     }
   };
-
-  const filteredJobs = jobs.filter((job) => {
-    const matchesSearch =
-      job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesFilter = filter === "All" || job.source === filter;
-    return matchesSearch && matchesFilter;
-  });
 
   const getSourceClass = (source) => {
     switch (source) {
@@ -101,8 +111,8 @@ const JobBoard = () => {
       {error && <div className="error-box">{error}</div>}
 
       <div className="job-grid">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map((job, index) => (
+        {jobs.length > 0 ? (
+          jobs.map((job, index) => (
             <div key={`${job.id}-${index}`} className="job-card">
               <div className="job-card-top">
                 <div className="company-icon">
@@ -146,6 +156,30 @@ const JobBoard = () => {
           </div>
         )}
       </div>
+
+      {jobs.length > 0 && (
+        <div className="pagination">
+          <button
+            className="pagination-btn"
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          <div className="pagination-info">
+            <span>Page {currentPage} of {Math.ceil(totalJobs / itemsPerPage)}</span>
+            <span className="total-jobs">{totalJobs} total jobs</span>
+          </div>
+
+          <button
+            className="pagination-btn"
+            onClick={() => setCurrentPage(prev => prev + 1)}
+            disabled={currentPage >= Math.ceil(totalJobs / itemsPerPage)}>
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

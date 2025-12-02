@@ -3,15 +3,17 @@ const prisma = new PrismaClient();
 
 const getAllJobs = async (req, res) => {
     try {
-        const { limit = 50, offset = 0, search } = req.query;
+        const { limit = 20, offset = 0, search = '', source = 'All' } = req.query;
+        const limitNum = parseInt(limit);
+        const offsetNum = parseInt(offset);
 
         const [unstopJobs, naukriJobs, internships] = await Promise.all([
-            prisma.unstopJob.findMany({ orderBy: { first_seen: 'desc' }, take: 20 }),
-            prisma.naukriJob.findMany({ orderBy: { first_seen: 'desc' }, take: 20 }),
-            prisma.internship.findMany({ orderBy: { first_seen: 'desc' }, take: 20})
+            prisma.unstopJob.findMany({ orderBy: { first_seen: 'desc' } }),
+            prisma.naukriJob.findMany({ orderBy: { first_seen: 'desc' } }),
+            prisma.internship.findMany({ orderBy: { first_seen: 'desc' } })
         ]);
 
-        const normalizedJobs = [
+        let normalizedJobs = [
             ...unstopJobs.map(job => ({
                 id: job.job_url,
                 title: job.title,
@@ -44,7 +46,19 @@ const getAllJobs = async (req, res) => {
             }))
         ];
 
-        res.json({ success: true, count: normalizedJobs.length, data: normalizedJobs })
+        if (source !== 'All') {
+            normalizedJobs = normalizedJobs.filter(job => job.source === source);
+        }
+
+        if (search) {
+            const searchLower = search.toLowerCase();
+            normalizedJobs = normalizedJobs.filter(job => job.title?.toLowerCase().includes(searchLower) || job.company?.toLowerCase().includes(searchLower))
+        }
+
+        const totalCount = normalizedJobs.length;
+        const paginatedJobs = normalizedJobs.slice(offsetNum, offsetNum + limitNum);
+
+        res.json({  success: true,  count: paginatedJobs.length, total: totalCount, data: paginatedJobs  })
 
     } catch (error) {
         console.error('Error fetching jobs:', error)

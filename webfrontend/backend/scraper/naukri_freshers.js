@@ -11,9 +11,8 @@ import { stdin as input, stdout as output } from 'process';
 dotenv.config();
 
 const JOBS_BASE_URL = 'https://www.naukri.com/jobs-in-india';
-const DEBUG_FOLDER = 'debug_jobs';
 
-const DEBUG_MODE = (process.env.DEBUG || 'true').toLowerCase() === 'true' || (process.env.DEBUG || '1') === '1';
+const DEBUG_MODE = (process.env.DEBUG || 'false').toLowerCase() === 'true' || (process.env.DEBUG || '0') === '1';
 const HEADLESS_MODE = (process.env.HEADLESS || 'false').toLowerCase() === 'true' || (process.env.HEADLESS || '0') === '1';
 const DB_ENABLED = (process.env.DB_ENABLED || 'true').toLowerCase() === 'true' || (process.env.DB_ENABLED || '1') === '1';
 
@@ -131,6 +130,24 @@ async function loadExistingJobs(conn) {
     hashes[r.job_url] = r.data_hash;
   }
   return { urls, hashes };
+}
+
+async function deleteOldJobs(conn) {
+  if (!conn) return 0;
+  try {
+    const query = `DELETE FROM naukri_jobs WHERE last_seen < DATE_SUB(NOW(), INTERVAL 7 DAY)`;
+    const [result] = await conn.execute(query);
+    const deletedCount = result.affectedRows || 0;
+    if (deletedCount > 0) {
+      console.log(`Deleted ${deletedCount} jobs older than 7 days`);
+    } else {
+      console.log('No old jobs to delete');
+    }
+    return deletedCount;
+  } catch (e) {
+    console.warn('Error deleting old jobs:', e.message);
+    return 0;
+  }
 }
 
 const rl = readline.createInterface({ input, output });
@@ -313,7 +330,6 @@ async function checkIfPageHasJobs(page) {
 
 async function scrapePages(context, freshness, function_gid, start_page, conn) {
   const page = await context.newPage();
-  if (DEBUG_MODE) ensureFolder(DEBUG_FOLDER);
   const results = [];
 
   const { urls: scraped_urls, hashes: existing_hashes } = await loadExistingJobs(conn);
@@ -345,10 +361,6 @@ async function scrapePages(context, freshness, function_gid, start_page, conn) {
     const cards = page.locator('div.srp-jobtuple-wrapper, div.cust-job-tuple');
     const count = await cards.count();
     console.log(`   → Found ${count} job cards`);
-
-    if (DEBUG_MODE) {
-      await page.screenshot({ path: path.join(DEBUG_FOLDER, `page_${current_page}.png`), fullPage: true }).catch(() => { });
-    }
 
     let page_results = 0;
     for (let i = 0; i < count; i++) {
@@ -436,6 +448,7 @@ async function main() {
 
   const conn = await dbConnect();
   await ensureJobsTable(conn);
+  await deleteOldJobs(conn);
 
   const browser = await firefox.launch({
     headless: HEADLESS_MODE,
