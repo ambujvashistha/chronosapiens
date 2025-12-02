@@ -1,130 +1,147 @@
+.connections-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
 .connections-container {
-    min-height: 100vh;
-    background-color: #f9f9fb;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.connections-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.connections-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+
+
+.connections-subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0 0 2.5rem 0;
+  line-height: 1.5;
+}
+
+.connections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.connection-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.connection-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.platform-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.platform-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  border: 1px solid #e2e8f0;
+}
+
+.platform-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.connect-button {
+  padding: 0.625rem 2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 130px;
+}
+
+.connect-button {
+  background: #bbf7d0;
+  color: #166534;
+}
+
+.connect-button:hover {
+  background: #86efac;
+}
+
+.connect-button.connected {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.connect-button.connected:hover {
+  background: #fca5a5;
+}
+
+.connections-footer {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .connections-page {
+    padding: 1rem;
   }
-  
-  .connections-nav {
-    background-color: white;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 16px 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  .connections-container {
+    padding: 1.5rem;
   }
-  
-  .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    gap: 32px;
+
+  .connections-title {
+    font-size: 1.5rem;
   }
-  
-  .avatar-placeholder {
-    width: 40px;
-    height: 40px;
-    background-color: #cbd5e1;
-    border-radius: 50%;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 40px;
-  }
-  
-  .nav-link {
-    color: #64748b;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 8px 0;
-    transition: color 0.2s;
-  }
-  
-  .nav-link:hover { color: #1e293b; }
-  .nav-link.active {
-    color: #6366f1;
-    border-bottom: 2px solid #6366f1;
-    padding-bottom: 14px;
-  }
-  
-  .connections-main {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 32px;
-    text-align: center;
-  }
-  
-  .page-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    color: #1e293b;
-  }
-  
-  .connections-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
+
   .connection-card {
-    background: white;
-    border-radius: 16px;
-    padding: 24px 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-    transition: all 0.2s;
+    padding: 1.25rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
-  
-  .connection-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-  }
-  
-  .platform-name {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1e293b;
-  }
-  
+
   .connect-button {
-    padding: 10px 32px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
+    width: 100%;
   }
-  
-  .connect-button {
-    background-color: #bbf7d0;
-    color: #166534;
-  }
-  
-  .connect-button:hover {
-    background-color: #86efac;
-  }
-  
-  .connect-button.connected {
-    background-color: #fca5a5;
-    color: #991b1b;
-  }
-  
-  .connect-button.connected:hover {
-    background-color: #f87171;
-  }
-  
-  .connections-footer {
-    margin-top: 100px;
-    color: #94a3b8;
-    font-size: 14px;
-  }
+}
