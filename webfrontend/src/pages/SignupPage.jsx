@@ -17,37 +17,38 @@ function SignupPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-        setError(''); 
+    const updateField = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        setError('');
     };
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     const validateForm = () => {
-        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+        const { name, email, password, confirmPassword } = formData;
+
+        if (!name || !email || !password || !confirmPassword) {
             setError('Please fill in all fields');
             return false;
         }
 
-        if (formData.name.length < 2) {
+        if (name.length < 2) {
             setError('Name must be at least 2 characters long');
             return false;
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
+        if (!emailPattern.test(email)) {
             setError('Please enter a valid email address');
             return false;
         }
 
-        if (formData.password.length < 6) {
+        if (password.length < 6) {
             setError('Password must be at least 6 characters long');
             return false;
         }
 
-        if (formData.password !== formData.confirmPassword) {
+        if (password !== confirmPassword) {
             setError('Passwords do not match');
             return false;
         }
@@ -59,9 +60,7 @@ function SignupPage() {
         e.preventDefault();
         setError('');
 
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         setLoading(true);
 
@@ -97,7 +96,7 @@ function SignupPage() {
                             className="form-input"
                             placeholder="John Doe"
                             value={formData.name}
-                            onChange={handleChange}
+                            onChange={updateField}
                             disabled={loading}
                             autoComplete="name"
                         />
@@ -114,7 +113,7 @@ function SignupPage() {
                             className="form-input"
                             placeholder="you@example.com"
                             value={formData.email}
-                            onChange={handleChange}
+                            onChange={updateField}
                             disabled={loading}
                             autoComplete="email"
                         />
@@ -131,7 +130,7 @@ function SignupPage() {
                             className="form-input"
                             placeholder="At least 6 characters"
                             value={formData.password}
-                            onChange={handleChange}
+                            onChange={updateField}
                             disabled={loading}
                             autoComplete="new-password"
                         />
@@ -148,17 +147,13 @@ function SignupPage() {
                             className="form-input"
                             placeholder="Re-enter your password"
                             value={formData.confirmPassword}
-                            onChange={handleChange}
+                            onChange={updateField}
                             disabled={loading}
                             autoComplete="new-password"
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        className="submit-btn"
-                        disabled={loading}
-                    >
+                    <button type="submit" className="submit-btn" disabled={loading}>
                         {loading && <span className="loading-spinner"></span>}
                         {loading ? 'Creating account...' : 'Sign Up'}
                     </button>
