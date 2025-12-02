@@ -117,6 +117,24 @@ async function loadExisting(conn) {
     return { urls, hashes };
 }
 
+async function deleteOldInternships(conn) {
+    if (!conn) return 0;
+    try {
+        const query = `DELETE FROM internships WHERE last_seen < DATE_SUB(NOW(), INTERVAL 7 DAY)`;
+        const [result] = await conn.execute(query);
+        const deletedCount = result.affectedRows || 0;
+        if (deletedCount > 0) {
+            console.log(`🗑️ Deleted ${deletedCount} internships older than 7 days`);
+        } else {
+            console.log('✅ No old internships to delete');
+        }
+        return deletedCount;
+    } catch (e) {
+        console.warn('⚠️ Error deleting old internships:', e.message);
+        return 0;
+    }
+}
+
 const rl = readline.createInterface({ input, output });
 
 async function getIntInput(promptText, defaultVal = null) {
@@ -435,6 +453,7 @@ async function main() {
 
     const conn = await dbConnect();
     await ensureInternshipTable(conn);
+    await deleteOldInternships(conn);
 
     const browser = await chromium.launch({
         headless: HEADLESS_MODE, args: [

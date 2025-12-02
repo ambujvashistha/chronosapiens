@@ -131,6 +131,24 @@ async function loadExistingJobs(conn) {
     return { urls, hashes };
 }
 
+async function deleteOldJobs(conn) {
+    if (!conn) return 0;
+    try {
+        const query = `DELETE FROM unstop_jobs WHERE last_seen < DATE_SUB(NOW(), INTERVAL 7 DAY)`;
+        const [result] = await conn.execute(query);
+        const deletedCount = result.affectedRows || 0;
+        if (deletedCount > 0) {
+            console.log(`🗑️ Deleted ${deletedCount} jobs older than 7 days`);
+        } else {
+            console.log('✅ No old jobs to delete');
+        }
+        return deletedCount;
+    } catch (e) {
+        console.warn('⚠️ Error deleting old jobs:', e.message);
+        return 0;
+    }
+}
+
 const rl = readline.createInterface({ input, output });
 
 async function getIntInput(promptText, defaultVal = null) {
@@ -433,6 +451,7 @@ async function main() {
 
     const conn = await dbConnect();
     await ensureJobsTable(conn);
+    await deleteOldJobs(conn);
 
     const browser = await chromium.launch({
         headless: HEADLESS_MODE, args: [
