@@ -10,9 +10,18 @@ const getAllJobs = async (req, res) => {
         console.log('Parsed params:', { limitNum, offsetNum });
 
         const [unstopJobs, naukriJobs, internships] = await Promise.all([
-            prisma.unstopJob.findMany({ orderBy: { first_seen: 'desc' } }),
-            prisma.naukriJob.findMany({ orderBy: { first_seen: 'desc' } }),
-            prisma.internship.findMany({ orderBy: { first_seen: 'desc' } })
+            prisma.unstopJob.findMany({ orderBy: { first_seen: 'desc' } }).catch(err => {
+                console.error('Error fetching Unstop jobs:', err.message);
+                return [];
+            }),
+            prisma.naukriJob.findMany({ orderBy: { first_seen: 'desc' } }).catch(err => {
+                console.error('Error fetching Naukri jobs:', err.message);
+                return [];
+            }),
+            prisma.internship.findMany({ orderBy: { first_seen: 'desc' } }).catch(err => {
+                console.error('Error fetching Internshala jobs:', err.message);
+                return [];
+            })
         ]);
 
         let normalizedJobs = [
