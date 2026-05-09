@@ -1,0 +1,18 @@
+# Docker environment files
+.env.docker
+
+# AWS Deployment guide (if requested to be ignored)
+README_AWS.md
+
+# OS files
+.DS_Store
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/

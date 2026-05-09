@@ -8,7 +8,7 @@ import { createObjectCsvWriter } from 'csv-writer';
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 
-dotenv.config();
+dotenv.config({ path: path.join(path.dirname(process.argv[1]), '../.env') });
 
 const BASE_URL = 'https://unstop.com';
 const DEBUG_FOLDER = 'debug_unstop';
