@@ -8,7 +8,7 @@ import { createObjectCsvWriter } from 'csv-writer';
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 
-dotenv.config();
+dotenv.config({ path: path.join(path.dirname(process.argv[1]), '../.env') });
 
 const JOBS_BASE_URL = 'https://www.naukri.com/jobs-in-india';
 
@@ -41,16 +41,7 @@ async function dbConnect() {
   try {
     let connectionConfig = {};
     if (process.env.DATABASE_URL) {
-      const url = new URL(process.env.DATABASE_URL);
-      connectionConfig = {
-        host: url.hostname,
-        port: parseInt(url.port) || 3306,
-        user: url.username,
-        password: url.password,
-        database: url.pathname.slice(1),
-        multipleStatements: false,
-        ssl: url.hostname.includes('railway') ? { rejectUnauthorized: false } : undefined
-      };
+      connectionConfig = { uri: process.env.DATABASE_URL, multipleStatements: false };
     } else {
       connectionConfig = {
         host: process.env.MYSQL_HOST || 'localhost',
