@@ -10,3 +10,5 @@ Let's Go !!!
 
 - [@ambujvashistha](https://github.com/ambujvashistha)
 - [@notAryan10](https://github.com/notAryan10)
+- [@Nandann018-ux](https://github.com/Nandann018-ux)
+- [@SE7EN2028](https://github.com/SE7EN2028)
