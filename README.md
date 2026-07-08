@@ -5,3 +5,8 @@ Built with **Express + React + JWT auth**, the project is open for contributors 
 
 We’re building this as a collaborative platform where students and developers can experiment, learn, and solve a real world problem together. 
 Let's Go !!!
+
+## Contributors
+
+- [@ambujvashistha](https://github.com/ambujvashistha)
+- [@notAryan10](https://github.com/notAryan10)
